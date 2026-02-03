@@ -12,17 +12,17 @@ cryptography>=41.0.0
 phonenumbers>=8.13.0
 
 # Optional: Presidio (comment out if fails)
-# presidio-analyzer>=2.2.0
-# presidio-anonymizer>=2.2.0
+presidio-analyzer>=2.2.0
+presidio-anonymizer>=2.2.0
 
 # Local LLM - Ollama (pure Python, should work)
 ollama>=0.1.0
 
 # HuggingFace fallback - only if you need it
-# transformers>=4.35.0
-# torch>=2.1.0
-# sentencepiece>=0.1.99
-# accelerate>=0.24.0
+transformers>=4.35.0
+torch>=2.1.0
+sentencepiece>=0.1.99
+accelerate>=0.24.0
 
 # Testing
 pytest>=7.4.0
