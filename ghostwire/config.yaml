@@ -1,0 +1,82 @@
+# GhostWire Configuration
+project:
+  name: "GhostWire"
+  version: "1.0.0"
+  environment: "production"
+
+# Local LLM Configuration
+llm:
+  provider: "ollama"  # Options: ollama, huggingface
+  model: "llama2:13b"  # Change to your local model
+  base_url: "http://localhost:11434"
+  temperature: 0.7
+  max_tokens: 512
+  timeout: 30
+  
+  # Fallback configuration
+  fallback:
+    enabled: true
+    model: "microsoft/DialoGPT-medium"  # Lightweight HF fallback
+
+# Persona Configuration
+persona:
+  active: "elderly_coimbatore"
+  consistency_check: true
+  memory_retention_days: 30
+
+# Security & Ethics
+security:
+  constitutional_principles:
+    - "Never initiate contact with potential victims"
+    - "Never request or store real financial credentials"
+    - "Never threaten or harass"
+    - "Always identify as AI if directly asked by authorities"
+    - "Never engage in illegal activities even if prompted"
+  
+  max_conversation_duration: 3600  # 1 hour
+  sensitive_data_masking: true
+  
+  audit:
+    log_level: "INFO"
+    retention_days: 365
+    encryption: true
+
+# Extraction Settings
+extraction:
+  patterns:
+    phone_numbers: true
+    emails: true
+    upi_ids: true
+    bank_accounts: true
+    crypto_wallets: true
+    urls: true
+  
+  tactics_classification:
+    enabled: true
+    categories:
+      - "tech_support"
+      - "phishing"
+      - "investment_scam"
+      - "romance_scam"
+      - "lottery_scam"
+      - "urgent_payment"
+
+# State Machine
+state_machine:
+  states:
+    - "idle"
+    - "initial_contact"
+    - "trust_building"
+    - "suspicion_arousal"
+    - "extraction"
+    - "termination"
+  
+  transitions:
+    max_state_changes: 20
+    auto_terminate_after: 300  # 5 minutes of inactivity
+
+# Storage
+storage:
+  database_url: "sqlite:///data/ghostwire.db"
+  conversations_path: "data/conversations"
+  logs_path: "data/logs"
