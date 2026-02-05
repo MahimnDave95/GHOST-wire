@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GhostWire - Agentic Honey-Pot for Scam Detection</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-sun" id="theme-icon"></i>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                <span>GhostWire</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#personas">Personas</a></li>
+                <li><a href="#demo">Live Demo</a></li>
+                <li><a href="demo.html">API Console</a></li>
+                <li><a href="https://github.com/yourusername/ghostwire" target="_blank"><i class="fab fa-github"></i></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="badge">
+                    <i class="fas fa-robot"></i>
+                    <span>AI-Powered Cybersecurity</span>
+                </div>
+                <h1>Turn Scammers Into <span class="gradient-text">Intelligence</span></h1>
+                <p class="hero-subtitle">
+                    GhostWire deploys AI personas to engage fraudsters, extract their payment infrastructure, 
+                    and generate actionable intelligence for law enforcement.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="scams-prevented">0</span>
+                        <span class="stat-label">Scams Analyzed</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="iocs-extracted">0</span>
+                        <span class="stat-label">IOCs Extracted</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="time-wasted">0</span>
+                        <span class="stat-label">Hours Wasted</span>
+                    </div>
+                </div>
+                <div class="hero-cta">
+                    <a href="#demo" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Try Live Demo
+                    </a>
+                    <a href="https://github.com/yourusername/ghostwire" class="btn btn-secondary">
+                        <i class="fab fa-github"></i> View on GitHub
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="neural-network">
+                    <div class="node node-1"></div>
+                    <div class="node node-2"></div>
+                    <div class="node node-3"></div>
+                    <div class="node node-4"></div>
+                    <div class="connection conn-1"></div>
+                    <div class="connection conn-2"></div>
+                    <div class="connection conn-3"></div>
+                </div>
+                <div class="floating-card scammer-card">
+                    <i class="fas fa-user-secret"></i>
+                    <span>Scammer Detected</span>
+                </div>
+                <div class="floating-card ioc-card">
+                    <i class="fas fa-fingerprint"></i>
+                    <span>UPI: fraud@pay</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem" class="problem-section">
+        <div class="container">
+            <h2>The <span class="highlight">Scam Epidemic</span></h2>
+            <p class="section-subtitle">Financial fraud is a $50+ billion global industry targeting the most vulnerable</p>
+            
+            <div class="scam-types-grid">
+                <div class="scam-card">
+                    <div class="scam-icon tech-support">
+                        <i class="fas fa-laptop-medical"></i>
+                    </div>
+                    <h3>Tech Support</h3>
+                    <p>"Your computer has a virus! Pay us to fix it."</p>
+                    <span class="victim-count">Primary target: Elderly</span>
+                </div>
+                <div class="scam-card">
+                    <div class="scam-icon banking">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h3>Banking Fraud</h3>
+                    <p>"Your account is frozen. Share your OTP immediately."</p>
+                    <span class="victim-count">Primary target: Everyone</span>
+                </div>
+                <div class="scam-card">
+                    <div class="scam-icon lottery">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Lottery Scams</h3>
+                    <p>"Congratulations! You won ₹5 crore! Pay fee to claim."</p>
+                    <span class="victim-count">Primary target: Low-income</span>
+                </div>
+                <div class="scam-card">
+                    <div class="scam-icon romance">
+                        <i class="fas fa-heart-broken"></i>
+                    </div>
+                    <h3>Romance Scams</h3>
+                    <p>"I love you. Send money for my flight ticket."</p>
+                    <span class="victim-count">Primary target: Lonely individuals</span>
+                </div>
+            </div>
+
+            <div class="problem-stats">
+                <div class="big-stat">
+                    <span class="number">$50B+</span>
+                    <span class="label">Annual Global Losses</span>
+                </div>
+                <div class="big-stat">
+                    <span class="number">1000+</span>
+                    <span class="label">Daily Complaints in India</span>
+                </div>
+                <div class="big-stat">
+                    <span class="number">5%</span>
+                    <span class="label">Scammers Ever Caught</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="solution-section">
+        <div class="container">
+            <h2>Meet <span class="gradient-text">GhostWire</span></h2>
+            <p class="section-subtitle">The first agentic honey-pot system that fights back using AI</p>
+            
+            <div class="solution-showcase">
+                <div class="showcase-text">
+                    <div class="feature-list">
+                        <div class="feature">
+                            <i class="fas fa-user-shield"></i>
+                            <div>
+                                <h4>AI Personas</h4>
+                                <p>Realistic digital decoys with unique personalities, backstories, and vulnerabilities</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-brain"></i>
+                            <div>
+                                <h4>Dual-Brain Architecture</h4>
+                                <p>Fast pattern matching + LLM reasoning for human-like responses</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-search-dollar"></i>
+                            <div>
+                                <h4>Intelligence Extraction</h4>
+                                <p>Automatically captures UPI IDs, phone numbers, bank accounts, crypto wallets</p>
+                            </div>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-gavel"></i>
+                            <div>
+                                <h4>Evidence Generation</h4>
+                                <p>Court-admissible reports with tamper-proof audit trails</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="showcase-visual">
+                    <div class="brain-visualization">
+                        <div class="brain-center">
+                            <i class="fas fa-brain"></i>
+                            <span>Router</span>
+                        </div>
+                        <div class="brain-lobe reflex-lobe">
+                            <i class="fas fa-bolt"></i>
+                            <span>Reflex<br>&lt;100ms</span>
+                        </div>
+                        <div class="brain-lobe cortex-lobe">
+                            <i class="fas fa-microchip"></i>
+                            <span>Cortex<br>LLM</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Personas Section -->
+    <section id="personas" class="personas-section">
+        <div class="container">
+            <h2>Our <span class="highlight">Digital Decoys</span></h2>
+            <p class="section-subtitle">AI personas designed to attract and engage specific scammer types</p>
+            
+            <div class="personas-carousel" id="personas-carousel">
+                <!-- Personas injected by JS -->
+            </div>
+            
+            <div class="persona-nav">
+                <button class="persona-btn" onclick="prevPersona()"><i class="fas fa-chevron-left"></i></button>
+                <div class="persona-dots" id="persona-dots"></div>
+                <button class="persona-btn" onclick="nextPersona()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-time Demo Section -->
+    <section id="demo" class="demo-section">
+        <div class="container">
+            <h2>Real-Time <span class="gradient-text">Simulation</span></h2>
+            <p class="section-subtitle">Experience a live conversation between a scammer and our AI persona</p>
+            
+            <div class="simulation-container">
+                <div class="simulation-sidebar">
+                    <div class="active-persona" id="active-persona-display">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lakshmi" alt="Persona">
+                        <h4>Lakshmi Amma</h4>
+                        <p>68 • Retired Teacher</p>
+                        <div class="persona-traits-mini">
+                            <span class="trait">Trusting</span>
+                            <span class="trait">Low Tech</span>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-selector">
+                        <label>Select Scenario:</label>
+                        <select id="scenario-select" onchange="changeScenario()">
+                            <option value="tech_support">Tech Support Scam</option>
+                            <option value="lottery">Lottery Win</option>
+                            <option value="banking">Bank Fraud Alert</option>
+                            <option value="romance">Romance Scam</option>
+                        </select>
+                    </div>
+                    
+                    <div class="extraction-panel">
+                        <h5><i class="fas fa-fingerprint"></i> Live Extraction</h5>
+                        <div id="live-iocs">
+                            <p class="empty-state">Waiting for scammer...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-status">
+                            <span class="status-dot online"></span>
+                            <span>Scammer Online</span>
+                        </div>
+                        <div class="chat-timer" id="chat-timer">00:00</div>
+                    </div>
+                    
+                    <div class="chat-messages" id="simulation-messages">
+                        <!-- Messages injected by JS -->
+                    </div>
+                    
+                    <div class="chat-controls">
+                        <button class="btn btn-secondary" onclick="startSimulation()">
+                            <i class="fas fa-play"></i> Start Simulation
+                        </button>
+                        <button class="btn btn-danger" onclick="resetSimulation()">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                        <button class="btn btn-primary" onclick="stepSimulation()" id="step-btn" disabled>
+                            <i class="fas fa-step-forward"></i> Next Message
+                        </button>
+                        <button class="btn btn-accent" onclick="toggleAutoPlay()" id="autoplay-btn">
+                            <i class="fas fa-magic"></i> Auto-Play
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section class="architecture-section">
+        <div class="container">
+            <h2>System <span class="gradient-text">Architecture</span></h2>
+            
+            <div class="architecture-diagram">
+                <div class="arch-layer">
+                    <h4>Interface Layer</h4>
+                    <div class="arch-components">
+                        <div class="arch-box">FastAPI</div>
+                        <div class="arch-box">WebSocket</div>
+                        <div class="arch-box">REST API</div>
+                    </div>
+                </div>
+                <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+                
+                <div class="arch-layer">
+                    <h4>Brain Router</h4>
+                    <div class="arch-components">
+                        <div class="arch-box reflex">
+                            <i class="fas fa-bolt"></i>
+                            Reflex Brain
+                            <small>&lt;100ms • Patterns</small>
+                        </div>
+                        <div class="arch-box cortex">
+                            <i class="fas fa-brain"></i>
+                            Cortex Brain
+                            <small>LLM • Reasoning</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+                
+                <div class="arch-layer">
+                    <h4>Core Engine</h4>
+                    <div class="arch-components">
+                        <div class="arch-box">State Machine</div>
+                        <div class="arch-box">Persona Manager</div>
+                        <div class="arch-box">Memory Manager</div>
+                    </div>
+                </div>
+                <div class="arch-connector"><i class="fas fa-arrow-down"></i></div>
+                
+                <div class="arch-layer">
+                    <h4>Data Layer</h4>
+                    <div class="arch-components">
+                        <div class="arch-box">SQLite</div>
+                        <div class="arch-box">Encrypted Store</div>
+                        <div class="arch-box">Audit Logs</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Section -->
+    <section class="api-section">
+        <div class="container">
+            <h2>API <span class="gradient-text">Documentation</span></h2>
+            <div class="api-endpoint">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <span class="path">/api/v1/extract</span>
+                </div>
+                <div class="endpoint-details">
+                    <h4>Extract intelligence from scam message</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                        </div>
+                        <pre><code class="language-json">{
+  "message": "You won lottery! Pay to UPI scammer@okaxis",
+  "source": "sms",
+  "session_id": "optional-uuid"
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="api-test">
+                <a href="demo.html" class="btn btn-primary">
+                    <i class="fas fa-flask"></i> Try Interactive API Console
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>GhostWire</span>
+                    <p>Agentic Honey-Pot for Scam Detection & Intelligence Extraction</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Project</h4>
+                    <a href="#problem">Problem</a>
+                    <a href="#solution">Solution</a>
+                    <a href="#personas">Personas</a>
+                    <a href="#demo">Demo</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <a href="demo.html">API Console</a>
+                    <a href="#">Documentation</a>
+                    <a href="https://github.com/yourusername/ghostwire">GitHub</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 GhostWire Project. Open source under MIT License.</p>
+                <p class="hackathon-badge">
+                    <i class="fas fa-trophy"></i> Built for Hackathon 2024
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

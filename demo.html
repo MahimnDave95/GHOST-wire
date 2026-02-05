@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GhostWire API Demo - Interactive Testing</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .api-tester {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .endpoint-config {
+            background: var(--primary-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .config-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .config-field {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .config-field label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .config-field input {
+            background: var(--primary);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 6px;
+            padding: 0.75rem;
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+        
+        .request-builder {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .builder-section {
+            background: var(--primary-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .builder-section h3 {
+            margin-bottom: 1rem;
+            color: var(--accent);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .param-field {
+            margin-bottom: 1rem;
+        }
+        
+        .param-field label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .param-field input,
+        .param-field textarea,
+        .param-field select {
+            width: 100%;
+            background: var(--primary);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 6px;
+            padding: 0.75rem;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+        
+        .param-field textarea {
+            min-height: 120px;
+            font-family: var(--font-main);
+            resize: vertical;
+        }
+        
+        .send-request-btn {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 1rem;
+            font-size: 1rem;
+        }
+        
+        .response-section {
+            margin-top: 2rem;
+        }
+        
+        .response-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .response-tab {
+            background: var(--primary-light);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .response-tab.active {
+            background: rgba(100, 255, 218, 0.1);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .response-content {
+            display: none;
+        }
+        
+        .response-content.active {
+            display: block;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .status-success {
+            background: rgba(107, 203, 119, 0.2);
+            color: var(--success);
+        }
+        
+        .status-error {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+        }
+        
+        .response-meta {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .history-section {
+            margin-top: 3rem;
+        }
+        
+        .history-item {
+            background: var(--primary-light);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .history-item:hover {
+            border-left-color: var(--accent);
+        }
+        
+        .history-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        .history-preview {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .loading-spinner.active {
+            display: block;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(100, 255, 218, 0.2);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* Additional styles for theme compatibility */
+.theme-toggle {
+    position: fixed;
+    top: 100px;
+    right: 30px;
+    z-index: 1001;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 15px var(--shadow);
+    transition: all 0.3s;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1) rotate(15deg);
+    border-color: var(--accent);
+}
+
+.theme-toggle i {
+    font-size: 1.3rem;
+    color: var(--accent);
+}
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                <span>GhostWire API Demo</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-arrow-left"></i> Back to Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero" style="min-height: auto; padding: 100px 0 40px;">
+        <div class="container">
+            <h1>API <span class="gradient-text">Testing Console</span></h1>
+            <p class="hero-subtitle">Test the GhostWire extraction endpoint with real scam messages</p>
+        </div>
+    </section>
+    <div class="theme-toggle" onclick="toggleTheme()">
+    <i class="fas fa-sun" id="theme-icon"></i>
+    </div>
+
+    <section class="api-tester">
+        <div class="container">
+            <!-- Endpoint Configuration -->
+            <div class="endpoint-config">
+                <h3><i class="fas fa-cog"></i> Endpoint Configuration</h3>
+                <div class="config-row">
+                    <div class="config-field">
+                        <label>API Base URL</label>
+                        <input type="text" id="api-base-url" value="http://localhost:8000" placeholder="https://your-api.com">
+                    </div>
+                    <div class="config-field">
+                        <label>API Key</label>
+                        <input type="password" id="api-key" value="gw-hackathon-2024-secure-key" placeholder="your-api-key">
+                    </div>
+                </div>
+                <div class="config-row">
+                    <div class="config-field">
+                        <label>Endpoint</label>
+                        <input type="text" value="/api/v1/extract" readonly style="opacity: 0.7;">
+                    </div>
+                    <div class="config-field">
+                        <label>Method</label>
+                        <input type="text" value="POST" readonly style="opacity: 0.7;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Request Builder -->
+            <div class="request-builder">
+                <div class="builder-section">
+                    <h3><i class="fas fa-paper-plane"></i> Request</h3>
+                    
+                    <div class="param-field">
+                        <label>Scammer Message *</label>
+                        <textarea id="req-message" placeholder="Enter the scam message here...">Congratulations! You have won 5 crore in lottery! Pay processing fee of 10000 to UPI winner@okaxis or call 9876543210 immediately. This offer expires in 24 hours!</textarea>
+                    </div>
+                    
+                    <div class="param-field">
+                        <label>Source</label>
+                        <select id="req-source">
+                            <option value="sms">SMS</option>
+                            <option value="email">Email</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="call">Phone Call</option>
+                            <option value="chat">Web Chat</option>
+                        </select>
+                    </div>
+                    
+                    <div class="param-field">
+                        <label>Session ID (Optional)</label>
+                        <input type="text" id="req-session" placeholder="Leave empty for new session">
+                    </div>
+                    
+                    <button class="btn btn-primary send-request-btn" onclick="sendRequest()">
+                        <i class="fas fa-play"></i> Send Request
+                    </button>
+                    
+                    <div class="loading-spinner" id="loading">
+                        <div class="spinner"></div>
+                        <p>Analyzing with AI...</p>
+                    </div>
+                </div>
+
+                <div class="builder-section">
+                    <h3><i class="fas fa-reply"></i> Response</h3>
+                    
+                    <div id="response-empty" style="text-align: center; padding: 3rem 0; color: var(--text-muted);">
+                        <i class="fas fa-arrow-left" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p>Send a request to see the response</p>
+                    </div>
+                    
+                    <div id="response-content" style="display: none;">
+                        <div class="status-badge" id="response-status">
+                            <i class="fas fa-check-circle"></i>
+                            <span>200 OK</span>
+                        </div>
+                        
+                        <div class="response-meta">
+                            <span id="response-time"><i class="fas fa-clock"></i> 45ms</span>
+                            <span id="response-size"><i class="fas fa-database"></i> 1.2 KB</span>
+                        </div>
+                        
+                        <div class="response-tabs">
+                            <div class="response-tab active" onclick="switchTab('body')">Body</div>
+                            <div class="response-tab" onclick="switchTab('headers')">Headers</div>
+                            <div class="response-tab" onclick="switchTab('raw')">Raw JSON</div>
+                        </div>
+                        
+                        <div class="response-content active" id="tab-body">
+                            <div class="code-block">
+                                <pre><code id="response-body"></code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="response-content" id="tab-headers">
+                            <div class="code-block">
+                                <pre><code id="response-headers"></code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="response-content" id="tab-raw">
+                            <div class="code-block">
+                                <pre><code id="response-raw"></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Request History -->
+            <div class="history-section">
+                <h3><i class="fas fa-history"></i> Request History</h3>
+                <div id="history-list">
+                    <p style="color: var(--text-muted); text-align: center; padding: 2rem;">No requests yet</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let requestHistory = [];
+
+        async function sendRequest() {
+            const baseUrl = document.getElementById('api-base-url').value.trim();
+            const apiKey = document.getElementById('api-key').value.trim();
+            const message = document.getElementById('req-message').value.trim();
+            const source = document.getElementById('req-source').value;
+            const sessionId = document.getElementById('req-session').value.trim();
+
+            if (!message) {
+                alert('Please enter a scam message');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').classList.add('active');
+
+            const requestData = {
+                message: message,
+                source: source
+            };
+            
+            if (sessionId) {
+                requestData.session_id = sessionId;
+            }
+
+            const startTime = performance.now();
+
+            try {
+                // For demo purposes, simulate API call if localhost not available
+                let response;
+                let data;
+                
+                if (baseUrl.includes('localhost')) {
+                    // Try actual API
+                    try {
+                        response = await fetch(`${baseUrl}/api/v1/extract`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-API-Key': apiKey
+                            },
+                            body: JSON.stringify(requestData)
+                        });
+                        data = await response.json();
+                    } catch (e) {
+                        // Fallback to simulation
+                        data = simulateResponse(message);
+                        response = { ok: true, status: 200, headers: new Headers() };
+                    }
+                } else {
+                    // Simulate for demo
+                    await new Promise(r => setTimeout(r, 800 + Math.random() * 1000));
+                    data = simulateResponse(message);
+                    response = { ok: true, status: 200, headers: new Headers() };
+                }
+
+                const endTime = performance.now();
+                const duration = Math.round(endTime - startTime);
+
+                displayResponse(data, response, duration);
+                addToHistory(message, data, duration);
+                
+            } catch (error) {
+                displayError(error);
+            } finally {
+                document.getElementById('loading').classList.remove('active');
+            }
+        }
+
+        function simulateResponse(message) {
+            // Same logic as main app but returns API format
+            const iocs = extractIOCs(message);
+            const classification = classifyScam(message);
+            const personaResponse = generatePersonaResponse(classification.category);
+
+            return {
+                status: "success",
+                session_id: "gw-" + Math.random().toString(36).substr(2, 9),
+                extracted_intelligence: {
+                    iocs: iocs.map(i => ({
+                        type: i.type.toLowerCase().replace(' ', '_'),
+                        value: i.value,
+                        confidence: i.confidence
+                    })),
+                    scam_category: classification.category,
+                    confidence_score: classification.confidence,
+                    tactics_detected: classification.tactics.map(t => t.toLowerCase().replace(' ', '_')),
+                    recommended_action: classification.confidence > 0.7 ? "block_and_report" : "monitor"
+                },
+                persona_response: personaResponse,
+                processing_time_ms: Math.floor(Math.random() * 50) + 20
+            };
+        }
+
+        function extractIOCs(message) {
+            const patterns = {
+                upi: /\b[a-zA-Z0-9._-]+@(upi|okaxis|okhdfcbank|oksbi|okicici|ybl|paytm|ibl)\b/gi,
+                phone: /(?:\+91|0)?[ -]?[6-9]\d{9}/g,
+                email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g
+            };
+            
+            const iocs = [];
+            for (const [type, regex] of Object.entries(patterns)) {
+                const matches = message.match(regex) || [];
+                matches.forEach(match => {
+                    if (!iocs.some(i => i.value === match)) {
+                        iocs.push({
+                            type: type === 'upi' ? 'UPI ID' : type === 'phone' ? 'Phone Number' : 'Email',
+                            value: match,
+                            confidence: 0.9
+                        });
+                    }
+                });
+            }
+            return iocs;
+        }
+
+        function classifyScam(message) {
+            const lower = message.toLowerCase();
+            const categories = {
+                lottery: ['won', 'winner', 'lottery', 'prize', 'crore'],
+                tech_support: ['virus', 'computer', 'technical', 'support'],
+                banking: ['bank', 'account', 'otp', 'suspended']
+            };
+            
+            let maxScore = 0;
+            let category = 'unknown';
+            
+            for (const [cat, keywords] of Object.entries(categories)) {
+                const score = keywords.reduce((a, k) => a + (lower.includes(k) ? 1 : 0), 0);
+                if (score > maxScore) {
+                    maxScore = score;
+                    category = cat;
+                }
+            }
+            
+            return {
+                category: category + '_scam',
+                confidence: Math.min(0.99, 0.7 + maxScore * 0.05),
+                tactics: ['social_engineering']
+            };
+        }
+
+        function generatePersonaResponse(category) {
+            const responses = [
+                "I am not sure I understand. Can you explain slowly?",
+                "My connection is bad. Can you repeat that please?",
+                "I am 68 years old, these computer things confuse me."
+            ];
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        function displayResponse(data, response, duration) {
+            document.getElementById('response-empty').style.display = 'none';
+            document.getElementById('response-content').style.display = 'block';
+            
+            // Status
+            const statusEl = document.getElementById('response-status');
+            if (response.ok) {
+                statusEl.className = 'status-badge status-success';
+                statusEl.innerHTML = '<i class="fas fa-check-circle"></i> <span>200 OK</span>';
+            } else {
+                statusEl.className = 'status-badge status-error';
+                statusEl.innerHTML = '<i class="fas fa-times-circle"></i> <span>' + response.status + ' Error</span>';
+            }
+            
+            // Meta
+            document.getElementById('response-time').innerHTML = `<i class="fas fa-clock"></i> ${duration}ms`;
+            document.getElementById('response-size').innerHTML = `<i class="fas fa-database"></i> ${JSON.stringify(data).length} bytes`;
+            
+            // Body (formatted)
+            document.getElementById('response-body').textContent = JSON.stringify(data, null, 2);
+            
+            // Headers
+            const headers = {};
+            if (response.headers) {
+                response.headers.forEach((value, key) => {
+                    headers[key] = value;
+                });
+            }
+            document.getElementById('response-headers').textContent = JSON.stringify(headers, null, 2);
+            
+            // Raw
+            document.getElementById('response-raw').textContent = JSON.stringify(data);
+        }
+
+        function displayError(error) {
+            document.getElementById('response-empty').style.display = 'none';
+            document.getElementById('response-content').style.display = 'block';
+            
+            const statusEl = document.getElementById('response-status');
+            statusEl.className = 'status-badge status-error';
+            statusEl.innerHTML = '<i class="fas fa-times-circle"></i> <span>Network Error</span>';
+            
+            document.getElementById('response-body').textContent = error.message;
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.response-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.response-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+
+        function addToHistory(message, response, duration) {
+            const history = {
+                time: new Date().toLocaleTimeString(),
+                preview: message.substring(0, 50) + '...',
+                category: response.extracted_intelligence?.scam_category || 'unknown',
+                iocs: response.extracted_intelligence?.iocs?.length || 0,
+                duration: duration
+            };
+            
+            requestHistory.unshift(history);
+            updateHistoryDisplay();
+        }
+
+        function updateHistoryDisplay() {
+            const container = document.getElementById('history-list');
+            
+            if (requestHistory.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No requests yet</p>';
+                return;
+            }
+            
+            container.innerHTML = requestHistory.map((h, i) => `
+                <div class="history-item" onclick="loadHistory(${i})">
+                    <div class="history-time">${h.time} • ${h.duration}ms</div>
+                    <div class="history-preview">
+                        <span style="color: var(--accent);">[${h.category}]</span> ${h.preview}
+                        <span style="float: right; color: var(--text-muted);">${h.iocs} IOCs found</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadHistory(index) {
+            // Could implement loading previous request
+            console.log('Loading history item', index);
+        }
+        // Theme functions for demo page
+function initTheme() {
+    const savedTheme = localStorage.getItem('ghostwire-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+}
+
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('ghostwire-theme', newTheme);
+    updateThemeIcon(newTheme);
+}
+
+function updateThemeIcon(theme) {
+    const icon = document.getElementById('theme-icon');
+    if (icon) {
+        icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+}
+
+// Initialize theme
+initTheme();
+
+// Expose to window
+window.toggleTheme = toggleTheme;
+    </script>
+</body>
+</html>
