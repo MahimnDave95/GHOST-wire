@@ -4,6 +4,7 @@ scammer detection, persona management, and intelligence extraction.
 """
 
 import asyncio
+import json
 import uuid
 from typing import Optional, Dict, Any, AsyncGenerator
 from datetime import datetime
