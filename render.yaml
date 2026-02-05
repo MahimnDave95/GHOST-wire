@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: ghostwire-hackathon
+    runtime: python
+    plan: free
+    
+    # Build settings
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+    
+    # Start command
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    
+    # Environment variables
+    envVars:
+      - key: GHOSTWIRE_API_KEY
+        generateValue: true  # Auto-generate or use: value: your-key-here
+      
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      
+      - key: PORT
+        value: 8000
+
+    # Health check
+    healthCheckPath: /
+    
+    # Auto-deploy on git push
+    autoDeploy: true
+
+# Optional: Database (if needed later)
+databases:
+  - name: ghostwire-db
+    plan: free
+    ipAllowList: []  # Allow from anywhere
